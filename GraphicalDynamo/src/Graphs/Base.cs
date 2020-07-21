@@ -15,6 +15,12 @@ using Dynamo.Graph.Nodes;
 using GraphicalDynamo.Geometry;
 using Graphical.Core;
 using System.Drawing;
+using ProtoCore.DSASM;
+using Edge = Graphical.Geometry.Edge;
+using Polygon = Graphical.Geometry.Polygon;
+using Vector = Graphical.Geometry.Vector;
+using Vertex = Graphical.Geometry.Vertex;
+
 #endregion
 
 namespace GraphicalDynamo.Graphs
@@ -53,7 +59,11 @@ namespace GraphicalDynamo.Graphs
         public List<Line> Lines()
         {
             List<Line> lines = new List<Line>();
-            foreach(gEdge edge in graph.edges)
+            foreach (var edge in graph.Edges)
+            {
+                
+            }
+            foreach(var edge in graph.Edges)
             {
                 var start = Points.ToPoint(edge.StartVertex);
                 var end = Points.ToPoint(edge.EndVertex);
@@ -67,7 +77,7 @@ namespace GraphicalDynamo.Graphs
         #region Internal Constructors
         internal BaseGraph() { }
 
-        internal BaseGraph(List<gPolygon> gPolygons)
+        internal BaseGraph(List<Polygon> gPolygons)
         {
             graph = new Graphical.Graphs.Graph(gPolygons);
         }
@@ -82,11 +92,11 @@ namespace GraphicalDynamo.Graphs
         public static BaseGraph ByPolygons(List<Polygon> polygons)
         {
             if (polygons == null) { throw new NullReferenceException("polygons"); }
-            List<gPolygon> input = new List<gPolygon>();
+            List<Polygon> input = new List<Polygon>();
             foreach (Polygon pol in polygons)
             {
-                var vertices = pol.Points.Select(pt => gVertex.ByCoordinates(pt.X, pt.Y, pt.Z)).ToList();
-                gPolygon gPol = gPolygon.ByVertices(vertices, false);
+                var vertices = pol.Vertices.Select(pt => Vertex.ByCoordinates(pt.X, pt.Y, pt.Z)).ToList();
+                Polygon gPol = Polygon.ByVertices(vertices, false);
                 input.Add(gPol);
             }
 
@@ -103,18 +113,18 @@ namespace GraphicalDynamo.Graphs
         {
             if(boundaries == null) { throw new NullReferenceException("boundaryPolygons"); }
             if(internals == null) { throw new NullReferenceException("internalPolygons"); }
-            List<gPolygon> input = new List<gPolygon>();
+            List<Polygon> input = new List<Polygon>();
             foreach (Polygon pol in boundaries)
             {
-                var vertices = pol.Points.Select(pt => gVertex.ByCoordinates(pt.X, pt.Y, pt.Z)).ToList();
-                gPolygon gPol = gPolygon.ByVertices(vertices, true);
+                var vertices = pol.Vertices.Select(pt => Vertex.ByCoordinates(pt.X, pt.Y, pt.Z)).ToList();
+                Polygon gPol = Polygon.ByVertices(vertices, true);
                 input.Add(gPol);
             }
 
             foreach (Polygon pol in internals)
             {
-                var vertices = pol.Points.Select(pt => gVertex.ByCoordinates(pt.X, pt.Y, pt.Z)).ToList();
-                gPolygon gPol = gPolygon.ByVertices(vertices, false);
+                var vertices = pol.Vertices.Select(pt => Vertex.ByCoordinates(pt.X, pt.Y, pt.Z)).ToList();
+                Polygon gPol = Polygon.ByVertices(vertices, false);
                 input.Add(gPol);
             }
 
@@ -136,9 +146,9 @@ namespace GraphicalDynamo.Graphs
 
             foreach(Line line in lines)
             {
-                gVertex start = Geometry.Points.ToVertex(line.StartPoint);
-                gVertex end = Geometry.Points.ToVertex(line.EndPoint);
-                g.graph.AddEdge(gEdge.ByStartVertexEndVertex(start, end));
+                Vertex start = Geometry.Points.ToVertex(line.StartPoint);
+                Vertex end = Geometry.Points.ToVertex(line.EndPoint);
+                g.graph.AddEdge(Edge.ByStartVertexEndVertex(start, end));
             }
             return g;
         }
@@ -160,21 +170,22 @@ namespace GraphicalDynamo.Graphs
             if (baseGraph == null) { throw new ArgumentNullException("graph"); }
             if (point == null) { throw new ArgumentNullException("point"); }
 
-            gVertex origin = gVertex.ByCoordinates(point.X, point.Y, point.Z);
+            Vertex origin = Vertex.ByCoordinates(point.X, point.Y, point.Z);
 
-            List<gVertex> vertices = Graphical.Graphs.VisibilityGraph.VertexVisibility(origin, baseGraph.graph);
+            List<Vertex> vertices = Graphical.Graphs.VisibilityGraph.VertexVisibility(origin, baseGraph.graph);
             List<DSPoint> points = vertices.Select(v => Points.ToPoint(v)).ToList();
             Surface isovist;
             // TODO: Implement better way of checking if polygon is self intersectingç
-            
-            Polygon polygon = Polygon.ByPoints(points);
 
-            if(polygon.SelfIntersections().Length > 0)
-            {
-                points.Add(point);
-                polygon = Polygon.ByPoints(points);
-
-            }
+            Autodesk.DesignScript.Geometry.Polygon polygon = Autodesk.DesignScript.Geometry.Polygon.ByPoints(points);
+            //fix back
+            //
+            // if(Graphical.Geometry.Polygon.Intersection(polygon).Length > 0)
+            // {
+            //     points.Add(point);
+            //     polygon = Polygon.by(points);
+            //
+            // }
 
             return Surface.ByPatch(polygon);
         }
@@ -188,7 +199,7 @@ namespace GraphicalDynamo.Graphs
         /// <returns></returns>
         public override string ToString()
         {
-            return String.Format("Graph:(gVertices: {0}, gEdges: {1})", graph.vertices.Count.ToString(), graph.edges.Count.ToString());
+            return String.Format("Graph:(gVertices: {0}, gEdges: {1})", graph.Vertices.Count.ToString(), graph.Edges.Count.ToString());
         }
 
         /// <summary>
@@ -221,24 +232,24 @@ namespace GraphicalDynamo.Graphs
 
         internal void TesselateBaseGraph(IRenderPackage package, TessellationParameters parameters)
         {
-            foreach (gVertex v in graph.vertices)
+            foreach (Vertex v in graph.Vertices)
             {
                 AddColouredVertex(package, v, vertexDefaultColour);
             }
 
-            foreach (gEdge e in graph.edges)
+            foreach (Edge e in graph.Edges)
             {
                 AddColouredEdge(package, e, edgeDefaultColour);
             }
         }
 
-        internal static void AddColouredVertex(IRenderPackage package, gVertex vertex, DSCore.Color color)
+        internal static void AddColouredVertex(IRenderPackage package, Vertex vertex, DSCore.Color color)
         {
             package.AddPointVertex(vertex.X, vertex.Y, vertex.Z);
             package.AddPointVertexColor(color.Red, color.Green, color.Blue, color.Alpha);
         }
 
-        internal static void AddColouredEdge(IRenderPackage package, gEdge edge, DSCore.Color color)
+        internal static void AddColouredEdge(IRenderPackage package, Edge edge, DSCore.Color color)
         {
             package.AddLineStripVertex(edge.StartVertex.X, edge.StartVertex.Y, edge.StartVertex.Z);
             package.AddLineStripVertex(edge.EndVertex.X, edge.EndVertex.Y, edge.EndVertex.Z);

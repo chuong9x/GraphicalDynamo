@@ -178,7 +178,6 @@
     <ProjectReference Include="..\..\Graphical\Graphical\Graphical.csproj">
       <Project>{428c4b56-65ea-4ad0-8b77-fca52448520a}</Project>
       <Name>Graphical</Name>
-      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
