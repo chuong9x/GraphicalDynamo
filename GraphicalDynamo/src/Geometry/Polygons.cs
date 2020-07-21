@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Autodesk.DesignScript.Geometry;
 using Autodesk.DesignScript.Runtime;
 using Graphical.Geometry;
+using Polygon = Graphical.Geometry.Polygon;
+using Vertex = Graphical.Geometry.Vertex;
 
 namespace GraphicalDynamo.Geometry
 {
@@ -19,10 +21,10 @@ namespace GraphicalDynamo.Geometry
         /// <param name="polygon"></param>
         /// <param name="point"></param>
         /// <returns></returns>
-        public static bool ContainsPoint(Polygon polygon, Point point)
+        public static bool ContainsPoint(Graphical.Geometry.Polygon polygon, Point point)
         {
-            gPolygon gPol = gPolygon.ByVertices(polygon.Points.Select(p => gVertex.ByCoordinates(p.X, p.Y, p.Z)).ToList());
-            gVertex vertex = gVertex.ByCoordinates(point.X, point.Y, point.Z);
+            Polygon gPol = Polygon.ByVertices(polygon.Vertices.Select(p => Vertex.ByCoordinates(p.X, p.Y, p.Z)).ToList());
+            Vertex vertex = Vertex.ByCoordinates(point.X, point.Y, point.Z);
 
             return gPol.ContainsVertex(vertex);
         }

@@ -11,6 +11,7 @@ using Autodesk.DesignScript.Geometry;
 using Autodesk.DesignScript.Runtime;
 using Graphical.Geometry;
 using Graphical.Extensions;
+using Vertex = Graphical.Geometry.Vertex;
 
 namespace GraphicalDynamo.Geometry
 {
@@ -33,7 +34,7 @@ namespace GraphicalDynamo.Geometry
         /// <returns></returns>
         public static DSPoint MidPoint(DSPoint point1, DSPoint point2)
         {
-            gVertex midVertex = gVertex.MidVertex(ToVertex(point1), ToVertex(point2));
+            Vertex midVertex = Vertex.MidVertex(ToVertex(point1), ToVertex(point2));
             return ToPoint(midVertex);
         }
 
@@ -73,20 +74,20 @@ namespace GraphicalDynamo.Geometry
         /// <returns></returns>
         public static double StartEndRadiansFromCentre(DSPoint centre, DSPoint start, DSPoint end)
         {
-            gVertex c = ToVertex(centre);
-            gVertex s = ToVertex(start);
-            gVertex e = ToVertex(end);
-            return gVertex.ArcRadAngle(c, s, e);
+            Vertex c = ToVertex(centre);
+            Vertex s = ToVertex(start);
+            Vertex e = ToVertex(end);
+            return Vertex.ArcRadAngle(c, s, e);
         }
         #endregion
 
         #region Internal Methods
-        internal static gVertex ToVertex(this DSPoint point)
+        internal static Vertex ToVertex(this DSPoint point)
         {
-            return gVertex.ByCoordinates(point.X, point.Y, point.Z);
+            return Vertex.ByCoordinates(point.X, point.Y, point.Z);
         }
 
-        internal static DSPoint ToPoint(this gVertex vertex)
+        internal static DSPoint ToPoint(this Vertex vertex)
         {
             return DSPoint.ByCoordinates(vertex.X, vertex.Y, vertex.Z);
         }
@@ -107,9 +108,9 @@ namespace GraphicalDynamo.Geometry
         /// <returns name="rad">Radians</returns>
         internal static double RadAngle(DSPoint centre, DSPoint point)
         {
-            gVertex v1 = gVertex.ByCoordinates(centre.X, centre.Y, centre.Z);
-            gVertex v2 = gVertex.ByCoordinates(point.X, point.Y, point.Z);
-            return gVertex.RadAngle(v1, v2);
+            Vertex v1 = Vertex.ByCoordinates(centre.X, centre.Y, centre.Z);
+            Vertex v2 = Vertex.ByCoordinates(point.X, point.Y, point.Z);
+            return Vertex.RadAngle(v1, v2);
         }
 
         #endregion

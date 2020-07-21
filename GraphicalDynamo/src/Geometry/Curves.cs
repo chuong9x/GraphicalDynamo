@@ -64,8 +64,9 @@ namespace GraphicalDynamo.Geometry
         internal static bool PolygonContainsPoint(Polygon polygon, DSPoint point)
         {
             Vertex vertex = Points.ToVertex(point);
-            var vertices = polygon.Points.Select(p => Points.ToVertex(p)).ToList();
-            Polygon gPolygon = gPolygon.ByVertices(vertices, false);
+            var vertices = polygon.Vertices.Select(p => Points.ToVertex(point)).ToList();
+            Polygon gPolygon = null;
+            gPolygon = Polygon.ByVertices(vertices, false);
 
             return gPolygon.ContainsVertex(vertex);
         }
@@ -121,10 +122,10 @@ namespace GraphicalDynamo.Geometry
             List<Edge> polygonEdges = new List<Edge>();
             foreach (Polygon gP in gPolygons)
             {
-                var points = gP.Vertices.Select(v => DSPoint.ByCoordinates(v.X, v.Y, v.Z)).ToList();
+                var vertices = gP.Vertices.Select(v => Vertex.ByCoordinates(v.X, v.Y, v.Z)).ToList();
                 if (gP.IsClosed)
                 {
-                    dsPolygons.Add(Polygon.ByPoints(points));
+                    dsPolygons.Add(Polygon.ByVertices(vertices));
                 }
                 else if (gP.Edges.Count > 1)
                 {
