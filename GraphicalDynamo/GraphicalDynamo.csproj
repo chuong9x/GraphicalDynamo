@@ -154,11 +154,25 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="dist\Graphical\bin\Graphical.dll.config" />
+    <None Include="dist\Graphical\pkg.json" />
     <None Include="Manifests\pkg.json" />
     <None Include="packages.config" />
-    <None Include="packages\Graphical\pkg.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="dist\Graphical\bin\Analysis.dll" />
+    <Content Include="dist\Graphical\bin\DSCoreNodes.dll" />
+    <Content Include="dist\Graphical\bin\DynamoServices.dll" />
+    <Content Include="dist\Graphical\bin\DynamoUnits.dll" />
+    <Content Include="dist\Graphical\bin\GeometryColor.dll" />
+    <Content Include="dist\Graphical\bin\Graphical.dll" />
+    <Content Include="dist\Graphical\bin\Graphical.pdb" />
+    <Content Include="dist\Graphical\bin\Graphical.xml" />
+    <Content Include="dist\Graphical\bin\GraphicalDynamo.dll" />
+    <Content Include="dist\Graphical\bin\GraphicalDynamo.pdb" />
+    <Content Include="dist\Graphical\bin\GraphicalDynamo.xml" />
+    <Content Include="dist\Graphical\bin\GraphicalDynamo_DynamoCustomization.xml" />
+    <Content Include="dist\Graphical\bin\ProtoGeometry.dll" />
     <Content Include="Manifests\GraphicalDynamo_DynamoCustomization.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +184,8 @@
     <Compile Include="src\Graphs\Base.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="packages\Graphical\bin\" />
-    <Folder Include="packages\Graphical\dyf\" />
-    <Folder Include="packages\Graphical\extra\" />
+    <Folder Include="dist\Graphical\dyf\" />
+    <Folder Include="dist\Graphical\extra\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Graphical\Graphical\Graphical.csproj">
