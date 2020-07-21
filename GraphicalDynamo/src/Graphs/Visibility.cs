@@ -16,6 +16,8 @@ using Dynamo.Graph.Nodes;
 using GraphicalDynamo.Geometry;
 using Graphical.Core;
 using System.Drawing;
+using Vertex = Graphical.Geometry.Vertex;
+
 #endregion
 
 namespace GraphicalDynamo.Graphs
@@ -111,8 +113,8 @@ namespace GraphicalDynamo.Graphs
             if (origin == null) { throw new ArgumentNullException("origin"); }
             if (destination == null) { throw new ArgumentNullException("destination"); }
 
-            gVertex gOrigin = gVertex.ByCoordinates(origin.X, origin.Y, origin.Z);
-            gVertex gDestination = gVertex.ByCoordinates(destination.X, destination.Y, destination.Z);
+            Vertex gOrigin = Vertex.ByCoordinates(origin.X, origin.Y, origin.Z);
+            Vertex gDestination = Vertex.ByCoordinates(destination.X, destination.Y, destination.Z);
 
             Graphical.Graphs.VisibilityGraph visibilityGraph = visGraph.graph as Graphical.Graphs.VisibilityGraph;
 
@@ -124,7 +126,7 @@ namespace GraphicalDynamo.Graphs
             return new Dictionary<string, object>()
             {
                 {"graph", baseGraph },
-                {"length", baseGraph.graph.edges.Select(e => e.Length).Sum() }
+                {"length", baseGraph.graph.Edges.Select(e => e.Length).Sum() }
             };
         }
 
@@ -194,9 +196,9 @@ namespace GraphicalDynamo.Graphs
 
             package.RequiresPerVertexColoration = true;
             var rangeColors = colorRange.Values.ToList();
-            for (var i = 0; i < base.graph.edges.Count; i++)
+            for (var i = 0; i < base.graph.Edges.Count; i++)
             {
-                var e = base.graph.edges[i];
+                var e = base.graph.Edges[i];
                 var factor = Factors[i];
                 DSCore.Color color;
 

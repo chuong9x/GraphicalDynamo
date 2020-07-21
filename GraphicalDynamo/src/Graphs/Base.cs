@@ -175,9 +175,12 @@ namespace GraphicalDynamo.Graphs
             List<Vertex> vertices = Graphical.Graphs.VisibilityGraph.VertexVisibility(origin, baseGraph.graph);
             List<DSPoint> points = vertices.Select(v => Points.ToPoint(v)).ToList();
             Surface isovist;
-            // TODO: Implement better way of checking if polygon is self intersectingç
+
+            // TODO: Implement better way of checking if polygon is self intersecting
 
             Autodesk.DesignScript.Geometry.Polygon polygon = Autodesk.DesignScript.Geometry.Polygon.ByPoints(points);
+
+           
             //fix back
             //
             // if(Graphical.Geometry.Polygon.Intersection(polygon).Length > 0)
